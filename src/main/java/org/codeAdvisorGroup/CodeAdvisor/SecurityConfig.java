@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/webjars/**","/login","/index","/h2-console/**")
+                .antMatchers("/resources/**","/webjars/**","/registration","/login","/index","/h2-console/**")
                 .permitAll()
                 .and()
                 .authorizeRequests()
@@ -35,13 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .formLogin()
-//                .loginPage("/login-bak.html")
+                .loginPage("/login")
                 .permitAll()
 
                 .and()
                 .logout()
                 .permitAll();
-        http.csrf().ignoringAntMatchers("/h2-console/**","/**");
+        http.csrf().disable();
         http.headers().frameOptions().sameOrigin();
     }
 

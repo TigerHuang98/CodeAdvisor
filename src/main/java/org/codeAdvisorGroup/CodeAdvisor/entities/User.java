@@ -18,7 +18,7 @@ public class User implements UserDetails {
 
     @NotEmpty
     @Column(nullable=false)
-    private String name;
+    private String username;
 
     @NotEmpty
     @Column(nullable=false)
@@ -33,18 +33,14 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String password, List<Code> codeList){
-        this.name=name;
+    public User(String username, String password, List<Code> codeList){
+        this.username = username;
         this.password=password;
         this.codeList=codeList;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -59,7 +55,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override
@@ -106,7 +102,7 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + username + '\'' +
                 ", codes='" + codeList.size() + '\'' +
                 '}';
     }

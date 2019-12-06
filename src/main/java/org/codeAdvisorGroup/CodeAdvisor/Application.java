@@ -5,7 +5,6 @@ import org.codeAdvisorGroup.CodeAdvisor.entities.Role;
 import org.codeAdvisorGroup.CodeAdvisor.entities.User;
 import org.codeAdvisorGroup.CodeAdvisor.repositories.RoleRepository;
 import org.codeAdvisorGroup.CodeAdvisor.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,7 +28,7 @@ public class Application {
             roleRepository.save(ROLE_USER);
 
             User user1=new User();
-            user1.setName("Bill");
+            user1.setUsername("Bill");
             user1.setPassword(bCryptPasswordEncoder.encode("pass"));
             Code code1=new Code(user1,"");
             Code code2=new Code(user1,"");
