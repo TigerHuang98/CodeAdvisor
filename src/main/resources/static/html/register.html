@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="../resources/img/icon.ico">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="styleSheet" href="../css/login.css" />
+
+    <title>Sign Up</title>
+</head>
+
+<body class="text-center w-100">
+    <div class="d-flex justify-content-center w-100 h-100">
+        <form id="registerForm" class="text-center d-flex align-items-center" style="width:20%;height:100%;">
+            <div class="flex-column w-100">
+                <h3>Sign Up</h3>
+                <div class="mt-4">
+                    <label for="registerEmail" class="sr-only">Email Address</label>
+                    <input type="email" class="form-control" id="registerEmail" placeholder="Email address" required
+                        autofocus>
+                </div>
+                <div class="mt-3">
+                    <label for="registerPassword" class="sr-only">Password</label>
+                    <input type="password" data-toggle="password" class="form-control" id="registerPassword" placeholder="Password"
+                        data-placement="after" style="display: inline-block;" data-eye-class="material-icons p-2"
+                        data-eye-open-class="visibility" data-eye-close-class="visibility_off"
+                        data-eye-class-position-inside="true" required>
+                    <input type="text" class="form-control" placeholder="Password" style="display: none;">
+                </div>
+                <button type="submit" class="btn btn-dark mt-4 w-100">Submit</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        $('[data-attr="show-password"]').password({
+        placement: 'before',
+        eyeClass: 'material-icons',
+        eyeOpenClass: 'visibility',
+        eyeCloseClass: 'visibility_off',
+        eyeClassPositionInside: true,
+        message: 'Click here to show/hide password'
+        })
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <!-- <script src="../resources/bootstrap-4.0.0-dist/others/jquery-3.3.1.slim.min.js"></script>
+    <script src="../resources/bootstrap-4.0.0-dist/others/popper.min.js"></script>
+    <script src="../resources/bootstrap-4.0.0-dist/js/bootstrap.min.js"></script> -->
+    <script src="../resources/password-plugin/bootstrap-show-password.js"></script>
+</body>
+
+</html>
