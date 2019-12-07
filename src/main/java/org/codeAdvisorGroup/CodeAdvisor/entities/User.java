@@ -1,5 +1,6 @@
 package org.codeAdvisorGroup.CodeAdvisor.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -24,10 +25,11 @@ public class User implements UserDetails {
     @Column(nullable=false)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     private Set<Role> roles;
 
-    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL)
+    @JsonIgnore
     private List<Code> codeList;
 
     public User() {
@@ -103,7 +105,6 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + id +
                 ", name='" + username + '\'' +
-                ", codes='" + codeList.size() + '\'' +
                 '}';
     }
 }
