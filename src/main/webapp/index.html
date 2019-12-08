@@ -4,48 +4,92 @@
     <title>Hello WebSocket</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/main.css" rel="stylesheet">
+    <link href="/resources/prettify.css" rel="stylesheet">
+    <script src="/resources/prettify.js"></script>
     <script src="/webjars/jquery/3.1.0/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>-->
     <script src="/static/app.js"></script>
 </head>
-<body>
+<body onload="prettyPrint()">
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
     enabled. Please enable
     Javascript and reload this page!</h2></noscript>
 <div id="main-content" class="container">
-    <div class="row">
-        <div class="col-md-5">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
-                    </button>
-                </div>
-            </form>
+    <div id="codeListPage">
+        <div class="row">
+            <div class="col-md-5">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="connect">WebSocket connection:</label>
+                        <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                        <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-7">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="name">Search code by author</label>
+                        <input type="text" id="name" class="form-control" placeholder="Code Author">
+                    </div>
+                    <button id="send" class="btn btn-default" type="submit">Send</button>
+                </form>
+            </div>
         </div>
-        <div class="col-md-7">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="name">Search code by author</label>
-                    <input type="text" id="name" class="form-control" placeholder="Code Author">
-                </div>
-                <button id="send" class="btn btn-default" type="submit">Send</button>
-            </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="codeListTable" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Code List</th>
+                    </tr>
+                    </thead>
+                    <tbody id="codes">
+                    </tbody>
+                </table>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="name">Upload new code</label>
+                        <br>
+                        <input type="text" id="codeTitleToSend" placeholder="code title">
+                        <textarea class="form-control" rows="10" id="codeToSend" placeholder="Your code here"></textarea>
+                        <button id="sendCode" class="btn btn-default" type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="codeListTable" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Code List</th>
-                </tr>
-                </thead>
-                <tbody id="codes">
-                </tbody>
-            </table>
+    <div id="codeDetailPage" style="display: none">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="codeID" style="display: none"></div>
+                <button id="goBacktoCodeList" class="btn btn-default pull-right" type="submit">Back</button>
+                <h3 id="codeTitle"></h3>
+                <pre id="code" class="prettyprint lang-java">
+
+                </pre>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Comments</th>
+                    </tr>
+                    </thead>
+                    <tbody id="comments">
+                    </tbody>
+                </table>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="name">Add a comment</label>
+                        <textarea class="form-control" rows="3" id="commentToSend"></textarea>
+                        <button id="sendComment" class="btn btn-default" type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
