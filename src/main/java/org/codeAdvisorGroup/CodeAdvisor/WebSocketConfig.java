@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/codelist","/codeDetail","/commentForCode");
+        config.enableSimpleBroker("/codelist","/codeDetail","/commentForCode","/codeForUser");
         config.setApplicationDestinationPrefixes("/app");
     }
 

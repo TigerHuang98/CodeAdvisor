@@ -89,4 +89,33 @@ public class MessageController {
         }
     }
 
+    @MessageMapping("/codeUpload/{userName}")
+    @SendTo("/codeForUser/{userName}")
+    public RealTimeCodeUploadReplyMessage realTimeCodeUpload(RealTimeCodeUploadRequestMessage message, @DestinationVariable String userName, Principal principal){
+        String principalName=principal.getName();
+        if(!userName.equals(principalName)){//someone is trying to cheat the server
+            return new RealTimeCodeUploadReplyMessage(false,null);
+        }
+        User user=userRepository.findByUsername(principalName);
+        if(user!=null){
+            Code code=new Code(user,message.getCodeTitleToSend(),message.getCodeToSend());
+            user.getCodeList().add(code);
+            user=userRepository.save(user);
+            List<Code> savedCodeList=user.getCodeList();
+            if (savedCodeList!=null&&!savedCodeList.isEmpty()) {
+                code=savedCodeList.get(savedCodeList.size()-1);
+            }else{
+                return new RealTimeCodeUploadReplyMessage(false,null);
+            }
+            Optional<Code> safeCode=codeRepository.findSafe(code.getId());
+            if(safeCode.isPresent()){
+                return new RealTimeCodeUploadReplyMessage(true,safeCode.get());
+            }else{
+                return new RealTimeCodeUploadReplyMessage(false,null);
+            }
+        }else{
+            return new RealTimeCodeUploadReplyMessage(false,null);
+        }
+    }
+
 }

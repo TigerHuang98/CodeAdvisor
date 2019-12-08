@@ -28,7 +28,7 @@ public class User implements UserDetails {
     @ManyToMany(fetch=FetchType.EAGER)
     private Set<Role> roles;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     @JsonIgnore
     private List<Code> codeList;
 
@@ -39,6 +39,14 @@ public class User implements UserDetails {
         this.username = username;
         this.password=password;
         this.codeList=codeList;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void resetId() {
+        this.id = 0;
     }
 
     public void setUsername(String username) {

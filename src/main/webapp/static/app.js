@@ -1,6 +1,8 @@
 var stompClient = null;
 var codeDetailSubscription = null;
 var commentForCodeSubscription = null;
+var codeForUserSubscription = null;
+var userName = null;
 connect();
 
 
@@ -71,7 +73,7 @@ function gotoCodeDetails(code_id) {
                 }
             });
         }else{
-            $("#comments").html("<tr><td>no comment available</td></tr>");//no code
+            $("#comments").html("<tr id='dummyComment'><td>no comment available</td></tr>");//no code
         }
     });
     stompClient.send("/app/codeDetail", {}, JSON.stringify({'codeID': code_id}));
@@ -104,12 +106,31 @@ function connect() {
                     }
                 );
             }else{
-                $("#codes").html("<tr><td>no code aviliable</td></tr>")
+                $("#codes").html("<tr id='dummyCode'><td>no code aviliable</td></tr>")
             }
         });
 
+        userName=frame.headers["user-name"];
+        subscribeCodeForUser(userName);
 
         stompClient.send("/app/codelist", {}, JSON.stringify({'username': frame.headers["user-name"]}));
+    });
+}
+
+function subscribeCodeForUser(userName) {
+    if(codeForUserSubscription!=null){
+        codeForUserSubscription.unsubscribe();
+    }
+    codeForUserSubscription=stompClient.subscribe('/codeForUser/'+userName, function (newCode) {
+        var obj=JSON.parse(newCode.body);
+        if(obj.codeUploadSuccess){
+            $("#dummyCode").remove();
+            $("#codes").append("<tr id="+obj.code.id+"><td>" + obj.code.title + "</td><td>"+obj.code.user.username+"</td></tr>");
+
+            $("#"+obj.code.id).click(function () {
+                gotoCodeDetails(obj.code.id);
+            });
+        }
     });
 }
 
@@ -123,11 +144,18 @@ function disconnect() {
 
 function sendName() {
     stompClient.send("/app/codelist", {}, JSON.stringify({'username': $("#name").val()}));
+    subscribeCodeForUser($("#name").val());
 }
-//TODO:back&unsubscribe
+
 function sendComment() {
     stompClient.send("/app/commentForCode"+codeID, {}, JSON.stringify({'commentToSend': $("#commentToSend").val()}));
     $("#commentToSend").val('');
+}
+
+function sendCode() {
+    stompClient.send("/app/codeUpload/"+userName, {}, JSON.stringify({'codeTitleToSend': $("#codeTitleToSend").val(),'codeToSend':$("#codeToSend").val()}));
+    $("#codeTitleToSend").val('');
+    $("#codeToSend").val('');
 }
 
 $(function () {
@@ -139,5 +167,5 @@ $(function () {
     $( "#send" ).click(function() { sendName(); });
     $( "#sendComment" ).click(function() { sendComment(); });
     $( "#goBacktoCodeList" ).click(function() { goBacktoCodeList(); });
-
+    $( "#sendCode" ).click(function() { sendCode(); });
 });
