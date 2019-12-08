@@ -1,4 +1,6 @@
 var stompClient = null;
+var codeDetailSubscription = null;
+var commentForCodeSubscription = null;
 connect();
 
 
@@ -43,7 +45,7 @@ function hideCodeDetailPage() {
 function gotoCodeDetails(code_id) {
     hideCodeListPage();
     showCodeDetailPage();
-    stompClient.subscribe('/user/codeDetail', function (codeDetail) {
+    codeDetailSubscription=stompClient.subscribe('/user/codeDetail', function (codeDetail) {
         var obj=JSON.parse(codeDetail.body);
         if(obj.codeFind){
             $("#codeID").html(obj.code.id);
@@ -61,7 +63,7 @@ function gotoCodeDetails(code_id) {
                 $("#comments").html("<tr id='dummyComment'><td>no comment available</td></tr>")
             }
             codeID=$("#codeID").html();
-            stompClient.subscribe('/commentForCode'+codeID, function (realTimeComment) {
+            commentForCodeSubscription=stompClient.subscribe('/commentForCode'+codeID, function (realTimeComment) {
                 var obj=JSON.parse(realTimeComment.body);
                 if(obj.commentSuccess){
                     $("#dummyComment").remove();
@@ -73,6 +75,13 @@ function gotoCodeDetails(code_id) {
         }
     });
     stompClient.send("/app/codeDetail", {}, JSON.stringify({'codeID': code_id}));
+}
+
+function goBacktoCodeList() {
+    showCodeListPage();
+    hideCodeDetailPage();
+    commentForCodeSubscription.unsubscribe();
+    codeDetailSubscription.unsubscribe();
 }
 
 function connect() {
@@ -129,4 +138,6 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
     $( "#sendComment" ).click(function() { sendComment(); });
+    $( "#goBacktoCodeList" ).click(function() { goBacktoCodeList(); });
+
 });
