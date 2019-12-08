@@ -4,20 +4,20 @@ import org.codeAdvisorGroup.CodeAdvisor.digest.CodeDigest;
 import org.codeAdvisorGroup.CodeAdvisor.entities.Code;
 import org.codeAdvisorGroup.CodeAdvisor.entities.Comment;
 import org.codeAdvisorGroup.CodeAdvisor.entities.User;
-import org.codeAdvisorGroup.CodeAdvisor.messages.CodeDetailReplyMessage;
-import org.codeAdvisorGroup.CodeAdvisor.messages.CodeDetailRequestMessage;
-import org.codeAdvisorGroup.CodeAdvisor.messages.CodeListReplyMessage;
-import org.codeAdvisorGroup.CodeAdvisor.messages.CodeListRequestMessage;
+import org.codeAdvisorGroup.CodeAdvisor.messages.*;
 import org.codeAdvisorGroup.CodeAdvisor.repositories.CodeRepository;
 import org.codeAdvisorGroup.CodeAdvisor.repositories.CommentRepository;
 import org.codeAdvisorGroup.CodeAdvisor.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -67,4 +67,26 @@ public class MessageController {
             return new CodeDetailReplyMessage(false,null,null);
         }
     }
+
+
+    @MessageMapping("/commentForCode{codeID}")
+    @SendTo("/commentForCode{codeID}")
+    public RealTimeCommentReplyMessage realTimeComment(RealTimeCommentRequestMessage message, @DestinationVariable String codeID, Principal principal){
+        String username=principal.getName();
+        User user=userRepository.findByUsername(username);
+        Optional<Code> code=codeRepository.findById(Long.parseLong(codeID));
+        if(user!=null&&code.isPresent()){
+            Comment comment=new Comment(user,code.get(),message.getCommentToSend());
+            commentRepository.save(comment);
+            Comment safeComment=commentRepository.findSafeById(comment.getId());
+            if(safeComment!=null){
+                return new RealTimeCommentReplyMessage(true,safeComment);
+            }else{
+                return new RealTimeCommentReplyMessage(false,null);
+            }
+        }else{
+            return new RealTimeCommentReplyMessage(false,null);
+        }
+    }
+
 }

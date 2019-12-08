@@ -38,6 +38,10 @@ public class Comment {
         this.commentContent = commentContent;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public User getUser() {
         return user;
     }

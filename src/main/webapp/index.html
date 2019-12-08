@@ -50,9 +50,10 @@
             </div>
         </div>
     </div>
-    <div id="codeDetailPage">
+    <div id="codeDetailPage" style="display: none">
         <div class="row">
             <div class="col-md-12">
+                <div id="codeID" style="display: none"></div>
                 <h3 id="codeTitle"></h3>
                 <pre id="code" class="prettyprint lang-java">
 
@@ -68,6 +69,13 @@
                     <tbody id="comments">
                     </tbody>
                 </table>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="name">Add a comment</label>
+                        <textarea class="form-control" rows="3" id="commentToSend"></textarea>
+                        <button id="sendComment" class="btn btn-default" type="submit">Send</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
