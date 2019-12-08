@@ -1,6 +1,7 @@
 package org.codeAdvisorGroup.CodeAdvisor;
 
 import org.codeAdvisorGroup.CodeAdvisor.entities.Code;
+import org.codeAdvisorGroup.CodeAdvisor.entities.Comment;
 import org.codeAdvisorGroup.CodeAdvisor.entities.Role;
 import org.codeAdvisorGroup.CodeAdvisor.entities.User;
 import org.codeAdvisorGroup.CodeAdvisor.repositories.RoleRepository;
@@ -40,6 +41,9 @@ public class Application {
                             "    }\n" +
                             "\n" +
                             "}");
+            Comment comment1=new Comment(user1,code1,"This code looks great!");
+            Comment comment2=new Comment(user1,code1,"Looks like we have a new coder!");
+            code1.setCommentList(Arrays.asList(comment1,comment2));
             Code code2=new Code(user1,"FooBar.java",
                     "public class FooBar {\n" +
                             "\n" +

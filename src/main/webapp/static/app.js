@@ -22,12 +22,33 @@ function hideCodeListTable() {
     $("#CodeListTable").hide();
 }
 
-//     <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img%20(131).jpg" class="img-fluid " alt="smaple image">
-//     <div class="mask flex-center">
-//     <p class="white-text">Zoom effect</p>
-// </div>
 
 
+function gotoCodeDetails(code_id) {
+    $("#codeListPage").hide();
+    stompClient.subscribe('/user/codeDetail', function (codeDetail) {
+        var obj=JSON.parse(codeDetail.body);
+        if(obj.codeFind){
+            $("#codeTitle").html(obj.code.title);
+            $("#code").html(obj.code.content);
+            PR.prettyPrint();
+            $("#comments").html("");
+            if(obj.commentList.length>0){
+                obj.commentList.forEach(
+                    function (comment) {
+                        $("#comments").append("<tr><td>" + comment.user.username + "</td><td>"+comment.commentContent+"</td></tr>");
+                    }
+                );
+            }else{
+                $("#comments").html("<tr><td>no comment aviliable</td></tr>")
+            }
+        }else{
+            $("#comments").html("<tr><td>no comment aviliable</td></tr>")
+        }
+        // console.log(obj);
+    });
+    stompClient.send("/app/codeDetail", {}, JSON.stringify({'codeID': code_id}));
+}
 
 function connect() {
     var socket = new SockJS('/websocket');
@@ -44,7 +65,7 @@ function connect() {
                         $("#codes").append("<tr id="+code.code_id+"><td>" + code.code_title + "</td><td>"+code.code_author+"</td></tr>");
 
                         $("#"+code.code_id).click(function () {
-                            console.log(code.code_id)//TODO:to code page
+                            gotoCodeDetails(code.code_id);
                         });
                     }
                 );

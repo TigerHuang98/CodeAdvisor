@@ -1,6 +1,7 @@
 package org.codeAdvisorGroup.CodeAdvisor.entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -20,11 +21,30 @@ public class Code {
     @Lob
     private String content;
 
-    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    private List<Comment> CommentList;
+    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    private List<Comment> commentList;
 
 
     public Code() {
+    }
+
+    public Code(long id, String username, String title, String content){//Constructor for safe query
+        this.id=id;
+        User user=new User();
+        user.setUsername(username);
+        this.user=user;
+        this.title=title;
+        this.content=content;
+    }
+
+    public Code(long id, String username, String title, String content, Collection<Comment> commentList){//Constructor for safe query
+        this.id=id;
+        User user=new User();
+        user.setUsername(username);
+        this.user=user;
+        this.title=title;
+        this.content=content;
+        this.commentList= (List<Comment>) commentList;
     }
 
     public Code(User user,String title,String content){
@@ -63,5 +83,13 @@ public class Code {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 }
